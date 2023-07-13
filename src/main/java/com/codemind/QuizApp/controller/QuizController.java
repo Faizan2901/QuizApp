@@ -1,6 +1,7 @@
 package com.codemind.QuizApp.controller;
 
 import com.codemind.QuizApp.entity.QuestionWrapper;
+import com.codemind.QuizApp.entity.Response;
 import com.codemind.QuizApp.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,4 +33,11 @@ public class QuizController {
         return quizService.getQuizQuestionByTitle(title);
 
     }
+
+    @PostMapping("submit/{title}")
+    public ResponseEntity<String> submitQuiz(@PathVariable String title, @RequestBody List<Response> responses)
+    {
+        return quizService.calculateQuiz(title,responses);
+    }
+
 }

@@ -5,6 +5,7 @@ import com.codemind.QuizApp.dao.QuizDAO;
 import com.codemind.QuizApp.entity.Question;
 import com.codemind.QuizApp.entity.QuestionWrapper;
 import com.codemind.QuizApp.entity.Quiz;
+import com.codemind.QuizApp.entity.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,5 +54,23 @@ public class QuizService  {
 
         return new ResponseEntity<>(questionForUser,HttpStatus.OK);
 
+    }
+
+    public ResponseEntity<String> calculateQuiz(String title, List<Response> responses) {
+
+        Optional<Quiz> quiz= Optional.ofNullable(quizDAO.findByTitle(title));
+        List<Question> questionsFromDB=quiz.get().getQuestions();
+        int right=0;
+        int i=0;
+
+        for (Response res:responses)
+        {
+            if(res.getResponse().equals(questionsFromDB.get(i).getRightAnswer()))
+            {
+                right++;
+            }
+            i++;
+        }
+        return new ResponseEntity<>("Your '"+title+"' quiz score is : "+right,HttpStatus.OK);
     }
 }
